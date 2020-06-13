@@ -44,13 +44,13 @@ class DbHelper {
             "$colDescription TEXT, $colPriority INTEGER, $colDate TEXT)");
   }
 
-  Future<int> insertTodo(Entry entry) async {
+  Future<int> insertEntry(Entry entry) async {
     Database db = await this.db;
     var result = await db.insert(tblEntry, entry.toMap());
     return result;
   }
 
-  Future<List> getEntry() async {
+  Future<List> getEntries() async {
     Database db = await this.db;
     var result =
         await db.rawQuery("SELECT * FROM $tblEntry order by $colPriority ASC");
