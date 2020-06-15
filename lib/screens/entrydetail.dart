@@ -25,8 +25,6 @@ class EntryDetail extends StatefulWidget {
 class EntryDetailState extends State {
   Entry entry;
   EntryDetailState(this.entry);
-  final _priorities = ["High", "Medium", "Low"];
-  String _priority = "Low";
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
@@ -38,7 +36,7 @@ class EntryDetailState extends State {
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          title: Text(entry.title),
+          title: Text(entry.date),
           actions: <Widget>[
             PopupMenuButton<String>(
               onSelected: select,
@@ -71,30 +69,20 @@ class EntryDetailState extends State {
                           )),
                     ),
                     Padding(
-                        padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-                        child: TextField(
+                      padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                      child: TextField(
+                          maxLines: 8,
                           controller: descriptionController,
                           style: textStyle,
                           onChanged: (value) => this.updateDescription(),
                           decoration: InputDecoration(
-                              labelText: "Description",
+                              labelText: "Entry",
+                              alignLabelWithHint: true,
                               labelStyle: textStyle,
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(5.0),
-                              )),
-                        )),
-                    ListTile(
-                        title: DropdownButton<String>(
-                      items: _priorities.map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      style: textStyle,
-                      value: retrievePriority(entry.priority),
-                      onChanged: (value) => updatePriority(value),
-                    ))
+                              ))),
+                    ),
                   ],
                 )
               ],
@@ -130,33 +118,13 @@ class EntryDetailState extends State {
 
   void save() {
     entry.date = new DateFormat.yMd().format(DateTime.now());
+    entry.weekday = DateFormat('EEEE').format(DateTime.now());
     if (entry.id != null) {
       helper.updateEntry(entry);
     } else {
       helper.insertEntry(entry);
     }
     Navigator.pop(context, true);
-  }
-
-  void updatePriority(String value) {
-    switch (value) {
-      case "High":
-        entry.priority = 1;
-        break;
-      case "Medium":
-        entry.priority = 2;
-        break;
-      case "Low":
-        entry.priority = 3;
-        break;
-    }
-    setState(() {
-      _priority = value;
-    });
-  }
-
-  String retrievePriority(int value) {
-    return _priorities[value - 1];
   }
 
   void updateTitle() {

@@ -1,16 +1,17 @@
 class Entry {
 
   // FIELDS
+  final List<String> weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
   int _id;
   String _title;
   String _description;
   String _date;
-  int _priority;
+  String _weekday;
 
   // CONSTRUCTORS
   // square brackets are for optional parameter
-  Entry(this._title, this._priority, this._date, [this._description]);
-  Entry.withId(this._id, this._title, this._priority, this._date,
+  Entry(this._title, this._date, this._weekday, [this._description]);
+  Entry.withId(this._id, this._title, this._date, this._weekday,
       [this._description]);
 
   // METHODS
@@ -18,7 +19,7 @@ class Entry {
   String get title => _title;
   String get description => _description;
   String get date => _date;
-  int get priority => _priority;
+  String get weekday => _weekday;
 
   set title(String newTitle) {
     if (newTitle.length <= 255) {
@@ -32,21 +33,24 @@ class Entry {
     }
   }
 
-  set priority(int newPriority) {
-    if (newPriority > 0 && newPriority <= 3) {
-      _priority = newPriority;
+  set date(String newDate) {
+    if (newDate.length == 10) {
+      _date = newDate;
+    } else if (newDate.length == 9) {
+      _date = '0' + newDate;
     }
   }
 
-  set date(String newDate) {
-    _date = newDate;
+  set weekday(String newWeekday) {
+    if (weekdays.contains(newWeekday)) {
+      _weekday = newWeekday;
+    }
   }
 
   Map<String, dynamic> toMap() {
     var map = Map<String, dynamic>();
     map["title"] = _title;
     map["description"] = _description;
-    map["priority"] = _priority;
     map["date"] = _date;
 
     if (_id != null) {
@@ -60,7 +64,6 @@ class Entry {
     this._id = o["id"];
     this._title = o["title"];
     this._description = o["description"];
-    this._priority = o["priority"];
     this._date = o["date"];
   }
 }

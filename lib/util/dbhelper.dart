@@ -12,7 +12,6 @@ class DbHelper {
   String colId = "id";
   String colTitle = "title";
   String colDescription = "description";
-  String colPriority = "priority";
   String colDate = "date";
   DbHelper._internal();
 
@@ -41,7 +40,7 @@ class DbHelper {
   void _createDb(Database db, int newVersion) async {
     await db.execute(
         "CREATE TABLE $tblEntry($colId INTEGER PRIMARY KEY, $colTitle TEXT, " +
-            "$colDescription TEXT, $colPriority INTEGER, $colDate TEXT)");
+            "$colDescription TEXT, $colDate TEXT)");
   }
 
   Future<int> insertEntry(Entry entry) async {
@@ -53,7 +52,7 @@ class DbHelper {
   Future<List> getEntries() async {
     Database db = await this.db;
     var result =
-        await db.rawQuery("SELECT * FROM $tblEntry order by $colPriority ASC");
+        await db.rawQuery("SELECT * FROM $tblEntry order by $colDate ASC");
     return result;
   }
 

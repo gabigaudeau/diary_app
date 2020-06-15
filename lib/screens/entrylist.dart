@@ -24,7 +24,7 @@ class EntryListState extends State {
         body: entryListItems(),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            navigateToDetail(Entry('', 3, ''));
+            navigateToDetail(Entry('', ''));
           },
           tooltip: "Add new Entry",
           child: new Icon(Icons.add),
@@ -40,8 +40,8 @@ class EntryListState extends State {
           elevation: 2.0,
           child: ListTile(
             leading: CircleAvatar(
-              backgroundColor: getColor(this.entries[position].priority),
-              child: Text(this.entries[position].priority.toString()),
+              backgroundColor: Colors.deepOrange,
+              child: Text(getDateDigit(this.entries[position].date)),
             ),
             title: Text(this.entries[position].title),
             subtitle: Text(this.entries[position].date),
@@ -77,24 +77,6 @@ class EntryListState extends State {
     });
   }
 
-
-  Color getColor(int priority) {
-    switch (priority) {
-      case 1: 
-        return Colors.red;
-        break;
-      case 2:
-        return Colors.orange;
-        break;
-      case 3: 
-        return Colors.green;
-        break;
-      default:
-        return Colors.green;
-    }
-  }
-
-
   void navigateToDetail(Entry entry) async {
     bool result = await Navigator.push(context, MaterialPageRoute(
       builder: (context) => EntryDetail(entry))
@@ -103,5 +85,17 @@ class EntryListState extends State {
       getData();
     }
   }
+
+  String getDateDigit(String date) {
+    String day = date.split('/')[0];
+
+    if (day[0] == '0') {
+      day = day[1].toString();
+    } 
+
+    return day;
+  }
+
+  String getWeekDay()
 
 }
